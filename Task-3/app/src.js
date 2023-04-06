@@ -18,6 +18,6 @@ app.use(express.urlencoded({ extended: true }));
 const taskRoutes = require("./routes/task.routes");
 app.use(taskRoutes);
 app.use("*", (req, res) => {
-  res.render("error404", { pageTitle: "Error" });
+  res.render("error404", { pageTitle: "ErrorPage" });
 });
 module.exports = app;
