@@ -1,84 +1,150 @@
 const deal = require("../helper/dealWithJson");
 const fileName = "./models/task.json";
+const connectDb = require("../helper/dbController");
+const ObjectId = require("mongodb").ObjectId;
+
 class Task {
-  static all = (req, res) => {
-    const allTasks = deal.readJsonData(fileName);
-    res.render("all", {
-      pageTitle: "allTasks",
-      allTasks,
-      hasData: allTasks.length,
-    });
+  static all = async (req, res) => {
+    try {
+      connectDb(async (db) => {
+        const allTasks = await db.collection("Tasks").find().toArray();
+        res.render("all", {
+          pageTitle: "allTasks",
+          allTasks,
+          hasData: allTasks.length,
+        });
+      });
+    } catch (error) {
+      console.log(error.message());
+      res.render(error404);
+    }
   };
 
   static add = (req, res) => {
     res.render("add", { pageTitle: "addTask" });
   };
 
-  static addLogic = (req, res) => {
-    const newTask = { id: Date.now(), status: false, ...req.query };
-    let allTasks = deal.readJsonData(fileName);
-    allTasks.push(newTask);
-    deal.writeJsonData(fileName, allTasks);
-    res.redirect("/");
+  static addLogic = async (req, res) => {
+    const newTask = { status: false, ...req.query };
+    try {
+      connectDb(async (db) => {
+        await db.collection("Tasks").insertOne(newTask);
+        res.redirect("/");
+      });
+    } catch (error) {
+      console.log(error.message());
+      res.render(error404);
+    }
   };
 
-  static show = (req, res) => {
-    const Task = deal
-      .readJsonData(fileName)
-      .find((task) => task.id == req.params.id);
-    res.render("show", { pageTitle: "showTask", Task });
+  static show = async (req, res) => {
+    try {
+      connectDb(async (db) => {
+        const Task = await db
+          .collection("Tasks")
+          .findOne({ _id: new ObjectId(req.params.id) });
+        res.render("show", { pageTitle: "showTask", Task });
+      });
+    } catch (error) {
+      console.log(error.message());
+      res.render(error404);
+    }
   };
 
   static deleteAll = (req, res) => {
-    deal.writeJsonData(fileName, []);
-    res.redirect("/");
+    try {
+      connectDb(async (db) => {
+        await db.collection("Tasks").deleteMany();
+        res.redirect("/");
+      });
+    } catch (error) {
+      console.log(error.message());
+      res.render(error404);
+    }
   };
 
   static delete = (req, res) => {
-    deal.writeJsonData(
-      fileName,
-      deal.readJsonData(fileName).filter((task) => task.id != req.params.id)
-    );
-    res.redirect("/");
+    try {
+      connectDb(async (db) => {
+        await db
+          .collection("Tasks")
+          .deleteOne({ _id: new ObjectId(req.params.id) });
+        res.redirect("/");
+      });
+    } catch (error) {
+      console.log(error.message());
+      res.render(error404);
+    }
   };
 
   static edit = (req, res) => {
-    const allTasks = deal.readJsonData(fileName);
-    const id = req.params.id;
-    const task = allTasks.find((ele) => ele.id == id);
-    res.render("edit", { pageTitle: "editTask", task });
+    try {
+      connectDb(async (db) => {
+        const Task = await db
+          .collection("Tasks")
+          .findOne({ _id: new ObjectId(req.params.id) });
+        res.render("edit", { pageTitle: "editTask", Task });
+      });
+    } catch (error) {
+      console.log(error.message());
+      res.render(error404);
+    }
   };
 
   static editLogic = (req, res) => {
-    const id = req.params.id;
-    let allTasks = deal.readJsonData(fileName);
-    const index = allTasks.findIndex((u) => u.id == id);
-    allTasks[index] = { id, status: allTasks[index].status, ...req.query };
-    deal.writeJsonData(fileName, allTasks);
-    res.redirect(`/show/${id}`);
-  };
-  static activate = (req, res) => {
-    const allTasks = deal.readJsonData(fileName);
-    const id = req.params.id;
-    const index = allTasks.findIndex((ele) => ele.id == id);
-    if ((allTasks[index].status = true)) deal.writeJsonData(fileName, allTasks);
-    else {
+    const updatedTask = { ...req.query };
+    try {
+      connectDb(async (db) => {
+        const Task = await db
+          .collection("Tasks")
+          .updateOne(
+            { _id: new ObjectId(req.params.id) },
+            { $set: updatedTask }
+          );
+        res.redirect(`/show/${req.params.id}`);
+      });
+    } catch (error) {
+      console.log(error.message());
+      res.render(error404);
     }
-    res.redirect("/");
+  };
+
+  static activate = (req, res) => {
+    try {
+      connectDb(async (db) => {
+        const Task = await db
+          .collection("Tasks")
+          .updateOne(
+            { _id: new ObjectId(req.params.id) },
+            { $set: { status: true } }
+          );
+        res.redirect(`/`);
+      });
+    } catch (error) {
+      console.log(error.message());
+      res.render(error404);
+    }
   };
 
   static search = (req, res) => {
-    let allTasks = deal.readJsonData(fileName);
-    let data = "d";
     // let data = document.getElementById("myInput").value;
-    allTasks = allTasks.filter(
-      (ele) => ele.title.includes(data) || ele.content.includes(data)
-    );
-    res.render("all", {
-      pageTitle: "allTasks",
-      allTasks,
-      hasData: allTasks.length,
-    });
+    let data = "/h/";
+    try {
+      connectDb(async (db) => {
+        const searchTasks = await db
+          .collection("Tasks")
+          .find({ $or: [{ title: { $regex: /h/ } }, { content: /h/ }] })
+          .toArray();
+        res.render("all", {
+          pageTitle: "searchTasks",
+          allTasks: searchTasks,
+          hasData: searchTasks.length,
+        });
+      });
+    } catch (error) {
+      console.log(error.message());
+      res.render(error404);
+    }
   };
 }
 
