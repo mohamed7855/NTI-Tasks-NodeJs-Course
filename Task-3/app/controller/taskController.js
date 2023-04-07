@@ -51,9 +51,9 @@ class Task {
 
   static editLogic = (req, res) => {
     const id = req.params.id;
-    const allTasks = deal.readJsonData(fileName);
+    let allTasks = deal.readJsonData(fileName);
     const index = allTasks.findIndex((u) => u.id == id);
-    allTasks[index] = { id, ...req.query };
+    allTasks[index] = { id, status: allTasks[index].status, ...req.query };
     deal.writeJsonData(fileName, allTasks);
     res.redirect(`/show/${id}`);
   };
