@@ -3,9 +3,15 @@
 <section class="container my-5">
     <div class="d-flex justify-content-between mb-4">
         <a href="/add" class="btn btn-primary">Add Task</a>
+        <a href="/Search" class="btn btn-primary">Search Task</a> 
         <a href="/deleteAll" class="btn btn-danger">Delete All</a>
     </div>
 
+
+
+<input type="text" placeholder="Search ...." id="myInput" class="form-control"/>
+
+<br><br>
 <table class="table table-bordered">
     <thead>
         <tr>
@@ -27,10 +33,10 @@
             <td>{{status}}</td>
             <td>{{dueDate}}</td>
             <td>
-                <a href="/single/{{id}}" class="btn btn-primary mx-3">Show</a>
+                <a href="/show/{{id}}" class="btn btn-primary mx-3">Show</a>
                 <a href="/edit/{{id}}" class="btn btn-warning mx-3">Edit</a>
                 <a href="/delete/{{id}}" class="btn btn-danger mx-3">Delete</a>
-                <a href="#" class="btn btn-danger mx-3">ChangeStatus</a>        
+                <a href="/activate/{{id}}" class="btn btn-danger mx-3">Activate</a>        
             </td>
         </tr>
         {{/each}}
