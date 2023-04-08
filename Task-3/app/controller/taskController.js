@@ -61,15 +61,14 @@ class Task {
     const allTasks = deal.readJsonData(fileName);
     const id = req.params.id;
     const index = allTasks.findIndex((ele) => ele.id == id);
-    if ((allTasks[index].status = true)) deal.writeJsonData(fileName, allTasks);
-    else {
-    }
+    allTasks[index].status = true;
+    deal.writeJsonData(fileName, allTasks);
     res.redirect("/");
   };
 
   static search = (req, res) => {
     let allTasks = deal.readJsonData(fileName);
-    let data = "d";
+    let data = "h";
     // let data = document.getElementById("myInput").value;
     allTasks = allTasks.filter(
       (ele) => ele.title.includes(data) || ele.content.includes(data)

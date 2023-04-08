@@ -1,0 +1,59 @@
+{{>header}}
+{{>nav}}
+<section class="container my-5">
+    <div class="d-flex justify-content-between mb-4">
+        <a href="/add" class="btn btn-primary">Add Task</a>
+        <a href="/Search" class="btn btn-primary">Search Task</a>
+        <a href="/deleteAll" class="btn btn-danger">Delete All</a>
+    </div>
+    <input type="text" placeholder="Search ...." id="myInput" class="form-control" />
+
+    {{!-- <form action="/Search" method="get">
+        <a href="/Search" class="btn btn-primary">Search Task</a>
+        <input type="text" placeholder="Search ...." id="myInput" class="form-control" />
+    </form> --}}
+
+    <br><br>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>id</th>
+                <th>Title</th>
+                <th>Content</th>
+                <th>Status</th>
+                <th>due date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#if hasData}}
+
+            {{#each allTasks}}
+            <tr>
+                <td>{{_id}}</td>
+                <td>{{title}}</td>
+                <td>{{content}}</td>
+                <td>{{status}}</td>
+                <td>{{dueDate}}</td>
+                <td>
+                    <a href="/show/{{_id}}" class="btn btn-primary mx-3">Show</a>
+                    <a href="/edit/{{_id}}" class="btn btn-warning mx-3">Edit</a>
+                    <a href="/delete/{{_id}}" class="btn btn-danger mx-3">Delete</a>
+
+                    {{#unless status }}
+                    <a href="/activate/{{_id}}" class="btn btn-danger mx-3">Activate</a>
+                    {{/unless}}
+                </td>
+            </tr>
+            {{/each}}
+            {{else}}
+            <tr>
+                <td colspan="5">No Data Yet</td>
+            </tr>
+            {{/if}}
+        </tbody>
+    </table>
+</section>
+
+
+
+{{>footer}}

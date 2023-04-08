@@ -1,0 +1,21 @@
+{{>header}}
+{{>nav}}
+
+
+<form action="/editLogic/{{Task._id}}">
+    <div class="mb-3">
+        <input name="title" class="form-control" value={{Task.title}}>
+    </div>
+    <div class="mb-3">
+        <input name="content" class="form-control" value={{Task.content}}>
+    </div>
+
+    <div class="mb-3">
+        <input name="dueDate" class="form-control" value={{Task.dueDate}}>
+    </div>
+    <div class="mb-3">
+        <button class="btn btn-primary">Edit</button>
+    </div>
+</form>
+
+{{>footer}}
