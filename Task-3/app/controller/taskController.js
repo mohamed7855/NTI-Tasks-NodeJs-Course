@@ -68,8 +68,7 @@ class Task {
 
   static search = (req, res) => {
     let allTasks = deal.readJsonData(fileName);
-    let data = "h";
-    // let data = document.getElementById("myInput").value;
+    let data = req.query.search;
     allTasks = allTasks.filter(
       (ele) => ele.title.includes(data) || ele.content.includes(data)
     );
