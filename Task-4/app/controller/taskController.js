@@ -128,12 +128,12 @@ class Task {
 
   static search = (req, res) => {
     // let data = document.getElementById("myInput").value;
-    let data = "/h/";
     try {
+      let data = req.query.search;
       connectDb(async (db) => {
         const searchTasks = await db
           .collection("Tasks")
-          .find({ $or: [{ title: { $regex: /h/ } }, { content: /h/ }] })
+          .find({ $or: [{ title: { $regex: data } }, { content: data }] })
           .toArray();
         res.render("all", {
           pageTitle: "searchTasks",
