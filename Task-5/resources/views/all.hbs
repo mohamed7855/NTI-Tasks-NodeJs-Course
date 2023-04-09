@@ -3,15 +3,17 @@
 <section class="container my-5">
     <div class="d-flex justify-content-between mb-4">
         <a href="/add" class="btn btn-primary">Add Task</a>
-        <a href="/Search" class="btn btn-primary">Search Task</a>
+        {{!-- <a href="/Search" class="btn btn-primary">Search Task</a> --}}
         <a href="/deleteAll" class="btn btn-danger">Delete All</a>
     </div>
-    <input type="text" placeholder="Search ...." id="myInput" class="form-control" />
+    {{!-- <input type="text" placeholder="Search ...." id="myInput" class="form-control" /> --}}
 
-    {{!-- <form action="/Search" method="get">
-        <a href="/Search" class="btn btn-primary">Search Task</a>
-        <input type="text" placeholder="Search ...." id="myInput" class="form-control" />
-    </form> --}}
+    <br>
+    <form action="/Search" method="get">
+        <input class="form-control me-2 justify-content-end" id="myInput" type="search" placeholder="Search"
+            name="search">
+        <button class="btn btn-outline-success text-light bg-primary" type="submit">Search</button>
+    </form>
 
     <br><br>
     <table class="table table-bordered">

@@ -91,11 +91,11 @@ class Task {
     }
   };
 
-  static editLogic = (req, res) => {
+  static editLogic = async (req, res) => {
     const updatedTask = { ...req.query };
     try {
       connectDb(async (db) => {
-        const Task = await db
+        await db
           .collection("Tasks")
           .updateOne(
             { _id: new ObjectId(req.params.id) },

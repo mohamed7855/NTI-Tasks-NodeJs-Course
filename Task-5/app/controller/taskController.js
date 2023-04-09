@@ -96,19 +96,19 @@ class Task {
   };
 
   static search = async (req, res) => {
-    // let data = document.getElementById("myInput").value;
-    let data = "/h/";
     try {
+      let data = req.query.search;
       const searchTasks = await taskModel.find({
-        $or: [{ title: { $regex: /h/ } }, { content: /h/ }],
+        $or: [{ title: { $regex: data } }, { content: { $regex: data } }],
       });
+
       res.render("all", {
         pageTitle: "searchTasks",
         allTasks: searchTasks,
         hasData: searchTasks.length,
       });
     } catch (error) {
-      console.log(error.message());
+      console.log(error.message);
       res.render("error404");
     }
   };
